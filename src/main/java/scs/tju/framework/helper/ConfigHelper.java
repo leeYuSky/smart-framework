@@ -65,7 +65,7 @@ public final class ConfigHelper {
      * @Description: 获取相应的 JSP 路径
      */
     public static String getAppJspPath(){
-        return PropsUtil.getString(CONFIG_PROPS,ConfigConstant.APP_JSP_PATH);
+        return PropsUtil.getString(CONFIG_PROPS,ConfigConstant.APP_JSP_PATH,"/WEB-INF/view/");
     }
 
     /**
@@ -74,6 +74,6 @@ public final class ConfigHelper {
      * @Description: 获取应用静态资源路径
      */
     public static String getAppAssertPath(){
-        return PropsUtil.getString(CONFIG_PROPS,ConfigConstant.APP_ASSERT_PATH);
+        return PropsUtil.getString(CONFIG_PROPS,ConfigConstant.APP_ASSERT_PATH,"/assert/");
     }
 }
