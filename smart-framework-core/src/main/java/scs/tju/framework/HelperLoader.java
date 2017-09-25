@@ -22,7 +22,7 @@ public final class HelperLoader {
         };
 
         for(Class<?> cls : classlist){
-            ClassUtil.loadClass(cls.getName(),true);
+            ClassUtil.loadClass(cls.getName());
         }
     }
 

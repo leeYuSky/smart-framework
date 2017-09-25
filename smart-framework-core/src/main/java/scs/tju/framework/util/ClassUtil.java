@@ -59,6 +59,15 @@ public final class ClassUtil {
 
     /**
      * @Author: liyuze
+     * @Date: 上午12:12 17/9/26
+     * @Description: 加载类（默认将初始化类）
+     */
+    public static Class<?> loadClass(String className) {
+        return loadClass(className, true);
+    }
+
+    /**
+     * @Author: liyuze
      * @Date: 上午11:13 17/9/21
      * @Description: 获取 classSet
      */

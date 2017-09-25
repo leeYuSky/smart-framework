@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="demo-smart-web" />
         <module name="smart-framework-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="demo-smart-web" target="1.5" />
       <module name="smart-framework" target="1.5" />
       <module name="smart-framework-core" target="1.5" />
     </bytecodeTargetLevel>

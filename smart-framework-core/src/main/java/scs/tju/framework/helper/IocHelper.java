@@ -38,7 +38,7 @@ public final class IocHelper {
                             Object beanFieldInstance = beanMap.get(beanFieldClass);
                             if(beanFieldInstance != null){
                                 // 通过反射初始化 BeanField 的值
-                                ReflectionUtil.setField(beanInstance,beanField,beanFields);
+                                ReflectionUtil.setField(beanInstance,beanField,beanFieldInstance);
                             }
                         }
                     }
