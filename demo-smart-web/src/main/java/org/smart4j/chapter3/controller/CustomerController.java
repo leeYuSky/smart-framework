@@ -30,6 +30,13 @@ public class CustomerController {
         return new View("customer.jsp").addModel("customerList", customerList);
     }
 
+    @Action("get:/getcustomer")
+    public Data getCustomer(Param param) {
+        List<Customer> customerList = customerService.getCustomerList();
+        return new Data(customerList);
+    }
+
+
     /**
      * 显示客户基本信息
      */

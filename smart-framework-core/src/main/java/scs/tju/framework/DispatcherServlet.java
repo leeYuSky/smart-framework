@@ -27,7 +27,7 @@ import java.util.Map;
  * @Date: Created in 下午9:33 17/9/23.
  */
 
-@WebServlet(urlPatterns = "/",loadOnStartup = 0)
+@WebServlet(urlPatterns = "/*",loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet{
     @Override
     public void init(ServletConfig config) throws ServletException {
