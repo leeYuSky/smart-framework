@@ -32,8 +32,10 @@ public class CustomerController {
 
     @Action("get:/getcustomer")
     public Data getCustomer(Param param) {
-        List<Customer> customerList = customerService.getCustomerList();
-        return new Data(customerList);
+//        List<Customer> customerList = customerService.getCustomerList();
+//        return new Data(customerList);
+        Customer c = customerService.getCustomer(Long.parseLong((String) param.getParamMap().get("id")));
+        return new Data(c);
     }
 
 

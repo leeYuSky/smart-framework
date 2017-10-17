@@ -3,9 +3,9 @@ package org.smart4j.chapter3.service;
 import java.util.List;
 import java.util.Map;
 
-import org.smart4j.chapter3.helper.DatabaseHelper;
 import org.smart4j.chapter3.model.Customer;
 import scs.tju.framework.annotation.Service;
+import scs.tju.framework.helper.DatabaseHelper;
 
 /**
  * 提供客户数据服务
