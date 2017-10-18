@@ -49,4 +49,13 @@ public final class BeanHelper {
 
         return (T) BEAN_MAP.get(cls);
     }
+
+    /**
+     * @Author: liyuze
+     * @Date: 上午12:10 17/10/18
+     * @Description: 设置Bean实例
+     */
+    public static void setBean(Class<?> cls ,Object obj){
+        BEAN_MAP.put(cls,obj);
+    }
 }
