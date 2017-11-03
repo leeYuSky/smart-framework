@@ -4,6 +4,7 @@ import scs.tju.framework.annotation.Controller;
 import scs.tju.framework.annotation.Service;
 import scs.tju.framework.util.ClassUtil;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -78,6 +79,38 @@ public final class ClassHelper {
         beanClassSet.addAll(getServiceClassSet());
         beanClassSet.addAll(getControllerClassSet());
         return beanClassSet;
+    }
+
+
+    /**
+     * @Author: liyuze
+     * @Date: 下午9:59 17/11/3
+     * @Description: 获取应用包名下某父类(或接口)的所有子类(或实现类)
+     */
+    public static Set<Class<?>> getClassSetBySuper(Class<?> superClass){
+        Set<Class<?>> classSet = new HashSet<Class<?>>();
+        for(Class<?> cls : CLASS_SET){
+            // isAssignableFrom 用来判断superClass是否和cls相同或superClass是否是cls的父类
+            if(superClass.isAssignableFrom(cls) && !superClass.equals(cls)){
+                classSet.add(cls);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * @Author: liyuze
+     * @Date: 下午10:03 17/11/3
+     * @Description: 获取应用包名下带有某个注解的所有类
+     */
+    public static Set<Class<?>> getClassSetByAnnotation(Class<? extends Annotation> annotationClass){
+        Set<Class<?>> classSet = new HashSet<Class<?>>();
+        for(Class<?> cls : CLASS_SET){
+            if(cls.isAnnotationPresent(annotationClass)){
+                classSet.add(cls);
+            }
+        }
+        return classSet;
     }
 
 }

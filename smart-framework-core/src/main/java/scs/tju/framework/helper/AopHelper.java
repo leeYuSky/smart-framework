@@ -1,0 +1,80 @@
+package scs.tju.framework.helper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import scs.tju.framework.annotation.Aspect;
+import scs.tju.framework.proxy.AspectProxy;
+import scs.tju.framework.proxy.Proxy;
+import scs.tju.framework.proxy.ProxyManager;
+
+import java.lang.annotation.Annotation;
+import java.util.*;
+
+/**
+ * @Author: liyuze
+ * @Description:
+ * @Date: Created in 下午10:35 17/11/3.
+ */
+public class AopHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AopHelper.class);
+
+    static {
+        try {
+            Map<Class<?>,Set<Class<?>>> proxyMap = createProxyMap();
+            Map<Class<?>,List<Proxy>> targetMap = createTargetMao(proxyMap);
+            for(Map.Entry<Class<?>,List<Proxy>> targetEntry : targetMap.entrySet()){
+                Class<?> targetClass = targetEntry.getKey();
+                List<Proxy> proxyList = targetEntry.getValue();
+                Object proxy = ProxyManager.createProxy(targetClass,proxyList);
+                BeanHelper.setBean(targetClass,proxy);
+            }
+        } catch (Exception e) {
+            LOGGER.error("aop failure",e);
+        }
+    }
+
+
+    private static Set<Class<?>> createTargetClassSet(Aspect aspect) throws Exception{
+
+        Set<Class<?>> targetClassSet = new HashSet<Class<?>>();
+        Class<? extends Annotation> annotation = aspect.value();
+        if(annotation != null && !annotation.equals(Aspect.class)){
+            targetClassSet.addAll(ClassHelper.getClassSetByAnnotation(annotation));
+        }
+
+        return targetClassSet;
+    }
+
+    private static Map<Class<?>,Set<Class<?>>> createProxyMap() throws Exception{
+        Map<Class<?>,Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
+        Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
+        for(Class<?> proxyClass : proxyClassSet){
+            if(proxyClass.isAnnotationPresent(Aspect.class)){
+                Aspect aspect = proxyClass.getAnnotation(Aspect.class);
+                Set<Class<?>> targetClassSet = createTargetClassSet(aspect);
+                proxyMap.put(proxyClass,targetClassSet);
+            }
+        }
+        return proxyMap;
+    }
+
+    private static Map<Class<?>,List<Proxy>> createTargetMao(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception{
+        Map<Class<?>,List<Proxy>> targetMap = new HashMap<Class<?>, List<Proxy>>();
+        for(Map.Entry<Class<?>,Set<Class<?>>> proxyEntry : proxyMap.entrySet()){
+            Class<?> proxyClass = proxyEntry.getKey();
+            Set<Class<?>> targetClassSet = proxyEntry.getValue();
+            for(Class<?> targetClass : targetClassSet){
+                Proxy proxy = (Proxy) proxyClass.newInstance();
+                if(targetMap.containsKey(targetClass)){
+                    targetMap.get(targetClass).add(proxy);
+                }else{
+                    List<Proxy> proxyList = new ArrayList<Proxy>();
+                    proxyList.add(proxy);
+                    targetMap.put(targetClass,proxyList);
+                }
+            }
+        }
+        return targetMap;
+    }
+}

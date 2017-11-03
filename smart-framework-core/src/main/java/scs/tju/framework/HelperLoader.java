@@ -1,9 +1,6 @@
 package scs.tju.framework;
 
-import scs.tju.framework.helper.BeanHelper;
-import scs.tju.framework.helper.ClassHelper;
-import scs.tju.framework.helper.ControllerHelper;
-import scs.tju.framework.helper.IocHelper;
+import scs.tju.framework.helper.*;
 import scs.tju.framework.util.ClassUtil;
 
 /**
@@ -17,6 +14,7 @@ public final class HelperLoader {
         Class<?>[] classlist = {
                 ClassHelper.class,
                 BeanHelper.class,
+                AopHelper.class,
                 IocHelper.class,
                 ControllerHelper.class
         };
