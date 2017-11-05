@@ -22,7 +22,7 @@ public class AopHelper {
     static {
         try {
             Map<Class<?>,Set<Class<?>>> proxyMap = createProxyMap();
-            Map<Class<?>,List<Proxy>> targetMap = createTargetMao(proxyMap);
+            Map<Class<?>,List<Proxy>> targetMap = createTargetMap(proxyMap);
             for(Map.Entry<Class<?>,List<Proxy>> targetEntry : targetMap.entrySet()){
                 Class<?> targetClass = targetEntry.getKey();
                 List<Proxy> proxyList = targetEntry.getValue();
@@ -34,7 +34,11 @@ public class AopHelper {
         }
     }
 
-
+    /**
+     * @Author: liyuze
+     * @Date: 下午5:04 17/11/5
+     * @Description: 获得含有指定annotation的类的集合
+     */
     private static Set<Class<?>> createTargetClassSet(Aspect aspect) throws Exception{
 
         Set<Class<?>> targetClassSet = new HashSet<Class<?>>();
@@ -46,26 +50,42 @@ public class AopHelper {
         return targetClassSet;
     }
 
+    /**
+     * @Author: liyuze
+     * @Date: 下午5:02 17/11/5
+     * @Description: 获得AspectProxy类的子类与其所对应的Aspect值的类的映射
+     */
     private static Map<Class<?>,Set<Class<?>>> createProxyMap() throws Exception{
         Map<Class<?>,Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
+        // 获得AspectProxy的子类的集合
         Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
         for(Class<?> proxyClass : proxyClassSet){
             if(proxyClass.isAnnotationPresent(Aspect.class)){
                 Aspect aspect = proxyClass.getAnnotation(Aspect.class);
+                // 获得Aspect注解中的值对应的类的集合
                 Set<Class<?>> targetClassSet = createTargetClassSet(aspect);
+                // key : AspectProxy的子类  value : Aspect注解中的值对应的类的集合
                 proxyMap.put(proxyClass,targetClassSet);
             }
         }
         return proxyMap;
     }
 
-    private static Map<Class<?>,List<Proxy>> createTargetMao(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception{
+    /**
+     * @Author: liyuze
+     * @Date: 下午5:30 17/11/5
+     * @Description: 获得一个目标类与所对应的proxy类的对象
+     */
+    private static Map<Class<?>,List<Proxy>> createTargetMap(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception{
         Map<Class<?>,List<Proxy>> targetMap = new HashMap<Class<?>, List<Proxy>>();
         for(Map.Entry<Class<?>,Set<Class<?>>> proxyEntry : proxyMap.entrySet()){
             Class<?> proxyClass = proxyEntry.getKey();
             Set<Class<?>> targetClassSet = proxyEntry.getValue();
             for(Class<?> targetClass : targetClassSet){
+                // 获得自定义proxy类的对象
                 Proxy proxy = (Proxy) proxyClass.newInstance();
+
+                // 一个类可能有多个自定义proxy类的对象
                 if(targetMap.containsKey(targetClass)){
                     targetMap.get(targetClass).add(proxy);
                 }else{
