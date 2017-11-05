@@ -2,7 +2,8 @@ package org.smart4j.chapter3.controller;
 
 import java.util.List;
 import java.util.Map;
-import org.smart4j.chapter3.model.Customer;
+
+import org.smart4j.chapter3.model.customer;
 import org.smart4j.chapter3.service.CustomerService;
 import scs.tju.framework.annotation.Action;
 import scs.tju.framework.annotation.Controller;
@@ -26,15 +27,15 @@ public class CustomerController {
      */
     @Action("get:/customer")
     public View index(Param param) {
-        List<Customer> customerList = customerService.getCustomerList();
+        List<customer> customerList = customerService.getCustomerList();
         return new View("customer.jsp").addModel("customerList", customerList);
     }
 
     @Action("get:/getcustomer")
     public Data getCustomer(Param param) {
-//        List<Customer> customerList = customerService.getCustomerList();
+//        List<customer> customerList = customerService.getCustomerList();
 //        return new Data(customerList);
-        Customer c = customerService.getCustomer(Long.parseLong((String) param.getParamMap().get("id")));
+        customer c = customerService.getCustomer(Long.parseLong((String) param.getFieldMap().get("id")));
         return new Data(c);
     }
 
@@ -45,7 +46,7 @@ public class CustomerController {
     @Action("get:/customer_show")
     public View show(Param param) {
         long id = param.getLong("id");
-        Customer customer = customerService.getCustomer(id);
+        customer customer = customerService.getCustomer(id);
         return new View("customer_show.jsp").addModel("customer", customer);
     }
 
@@ -62,7 +63,7 @@ public class CustomerController {
      */
     @Action("post:/customer_create")
     public Data createSubmit(Param param) {
-        Map<String, Object> fieldMap = param.getParamMap();
+        Map<String, Object> fieldMap = param.getFieldMap();
         boolean result = customerService.createCustomer(fieldMap);
         return new Data(result);
     }
@@ -73,7 +74,7 @@ public class CustomerController {
     @Action("get:/customer_edit")
     public View edit(Param param) {
         long id = param.getLong("id");
-        Customer customer = customerService.getCustomer(id);
+        customer customer = customerService.getCustomer(id);
         return new View("customer_edit.jsp").addModel("customer", customer);
     }
 
@@ -83,7 +84,7 @@ public class CustomerController {
     @Action("put:/customer_edit")
     public Data editSubmit(Param param) {
         long id = param.getLong("id");
-        Map<String, Object> fieldMap = param.getParamMap();
+        Map<String, Object> fieldMap = param.getFieldMap();
         boolean result = customerService.updateCustomer(id, fieldMap);
         return new Data(result);
     }
@@ -92,6 +93,7 @@ public class CustomerController {
      * 处理 删除客户 请求
      */
     @Action("delete:/customer_edit")
+//    @Action("get:/customer_delete")
     public Data delete(Param param) {
         long id = param.getLong("id");
         boolean result = customerService.deleteCustomer(id);

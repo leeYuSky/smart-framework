@@ -71,6 +71,65 @@ public final class DatabaseHelper {
     }
 
     /**
+     * @Author: liyuze
+     * @Date: 下午9:45 17/11/5
+     * @Description: 开启事务
+     */
+    public static void beginTransaction(){
+        Connection conn = getConnection();
+        if(conn != null){
+            try {
+                conn.setAutoCommit(false); //开始事务
+            } catch (SQLException e) {
+                LOGGER.error("begin transaction failure",e);
+                throw new RuntimeException(e);
+            }finally {
+                CONNECTION_HOLDER.set(conn);
+            }
+        }
+    }
+
+    /**
+     * @Author: liyuze
+     * @Date: 下午9:47 17/11/5
+     * @Description: 提交事务
+     */
+    public static void commitTransaction(){
+        Connection conn = getConnection();
+        if(conn != null){
+            try {
+                conn.commit();
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.error("commit transaction failure",e);
+                throw new RuntimeException(e);
+            }finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
+
+    /**
+     * @Author: liyuze
+     * @Date: 下午9:48 17/11/5
+     * @Description:
+     */
+    public static void rollbackTransaction(){
+        Connection conn = getConnection();
+        if(conn != null){
+            try {
+                conn.rollback();
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.error("rollback transaction failure",e);
+                throw new RuntimeException(e);
+            }finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
+
+    /**
      * 执行查询语句
      */
     public List<Map<String, Object>> executeQuery(String sql, Object... params) {

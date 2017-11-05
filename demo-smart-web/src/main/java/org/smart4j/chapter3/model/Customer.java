@@ -3,7 +3,7 @@ package org.smart4j.chapter3.model;
 /**
  * 客户
  */
-public class Customer {
+public class customer {
 
     /**
      * ID

@@ -3,9 +3,11 @@ package scs.tju.framework.helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scs.tju.framework.annotation.Aspect;
+import scs.tju.framework.annotation.Service;
 import scs.tju.framework.proxy.AspectProxy;
 import scs.tju.framework.proxy.Proxy;
 import scs.tju.framework.proxy.ProxyManager;
+import scs.tju.framework.proxy.TransactionProxy;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -57,6 +59,17 @@ public class AopHelper {
      */
     private static Map<Class<?>,Set<Class<?>>> createProxyMap() throws Exception{
         Map<Class<?>,Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
+        addAspectProxy(proxyMap);
+        addTransactionProxy(proxyMap);
+        return proxyMap;
+    }
+
+    /**
+     * @Author: liyuze
+     * @Date: 下午10:14 17/11/5
+     * @Description: 获得AspectProxy的子类的集合
+     */
+    private static void addAspectProxy(Map<Class<?>,Set<Class<?>>> proxyMap) throws Exception{
         // 获得AspectProxy的子类的集合
         Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
         for(Class<?> proxyClass : proxyClassSet){
@@ -68,7 +81,15 @@ public class AopHelper {
                 proxyMap.put(proxyClass,targetClassSet);
             }
         }
-        return proxyMap;
+    }
+    /**
+     * @Author: liyuze
+     * @Date: 下午10:13 17/11/5
+     * @Description: 获得事务类代理的集合
+     */
+    private static void addTransactionProxy(Map<Class<?>,Set<Class<?>>> proxyMap){
+        Set<Class<?>> serviceClassSet = ClassHelper.getClassSetByAnnotation(Service.class);
+        proxyMap.put(TransactionProxy.class,serviceClassSet);
     }
 
     /**
