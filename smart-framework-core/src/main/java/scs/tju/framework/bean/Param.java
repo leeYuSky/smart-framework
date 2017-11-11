@@ -1,6 +1,7 @@
 package scs.tju.framework.bean;
 
 import scs.tju.framework.util.CastUtil;
+import scs.tju.framework.util.CollectionUtil;
 
 import java.util.Map;
 
@@ -58,5 +59,14 @@ public class Param {
      */
     public boolean getBoolean(String name) {
         return CastUtil.castBoolean(getFieldMap().get(name));
+    }
+
+    /**
+     * @Author: liyuze
+     * @Date: 下午10:29 17/11/11
+     * @Description: 验证参数是否为空
+     */
+    public boolean isEmpty(){
+        return CollectionUtil.isEmpty(paramMap);
     }
 }
